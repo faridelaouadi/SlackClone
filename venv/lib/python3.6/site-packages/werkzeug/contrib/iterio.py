@@ -36,24 +36,15 @@ r"""
 
     .. _greenlet: https://github.com/python-greenlet/greenlet
 
-    :copyright: 2007 Pallets
-    :license: BSD-3-Clause
+    :copyright: (c) 2014 by the Werkzeug Team, see AUTHORS for more details.
+    :license: BSD, see LICENSE for more details.
 """
-import warnings
-
-from .._compat import implements_iterator
-
 try:
     import greenlet
 except ImportError:
     greenlet = None
 
-warnings.warn(
-    "'werkzeug.contrib.iterio' is deprecated as of version 0.15 and"
-    " will be removed in version 1.0.",
-    DeprecationWarning,
-    stacklevel=2,
-)
+from werkzeug._compat import implements_iterator
 
 
 def _mixed_join(iterable, sentinel):
@@ -61,18 +52,19 @@ def _mixed_join(iterable, sentinel):
     iterator = iter(iterable)
     first_item = next(iterator, sentinel)
     if isinstance(first_item, bytes):
-        return first_item + b"".join(iterator)
-    return first_item + u"".join(iterator)
+        return first_item + b''.join(iterator)
+    return first_item + u''.join(iterator)
 
 
 def _newline(reference_string):
     if isinstance(reference_string, bytes):
-        return b"\n"
-    return u"\n"
+        return b'\n'
+    return u'\n'
 
 
 @implements_iterator
 class IterIO(object):
+
     """Instances of this object implement an interface compatible with the
     standard Python :class:`file` object.  Streams are either read-only or
     write-only depending on how the object is created.
@@ -83,7 +75,7 @@ class IterIO(object):
 
     If the first argument is a callable then the stream object will be
     created and passed to that function.  The caller itself however will
-    not receive a stream but an iterable.  The function will be executed
+    not receive a stream but an iterable.  The function will be be executed
     step by step as something iterates over the returned iterable.  Each
     call to :meth:`flush` will create an item for the iterable.  If
     :meth:`flush` is called without any writes in-between the sentinel
@@ -99,7 +91,7 @@ class IterIO(object):
        `sentinel` parameter was added.
     """
 
-    def __new__(cls, obj, sentinel=""):
+    def __new__(cls, obj, sentinel=''):
         try:
             iterator = iter(obj)
         except TypeError:
@@ -111,53 +103,53 @@ class IterIO(object):
 
     def tell(self):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
+            raise ValueError('I/O operation on closed file')
         return self.pos
 
     def isatty(self):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
+            raise ValueError('I/O operation on closed file')
         return False
 
     def seek(self, pos, mode=0):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
-        raise IOError(9, "Bad file descriptor")
+            raise ValueError('I/O operation on closed file')
+        raise IOError(9, 'Bad file descriptor')
 
     def truncate(self, size=None):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
-        raise IOError(9, "Bad file descriptor")
+            raise ValueError('I/O operation on closed file')
+        raise IOError(9, 'Bad file descriptor')
 
     def write(self, s):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
-        raise IOError(9, "Bad file descriptor")
+            raise ValueError('I/O operation on closed file')
+        raise IOError(9, 'Bad file descriptor')
 
     def writelines(self, list):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
-        raise IOError(9, "Bad file descriptor")
+            raise ValueError('I/O operation on closed file')
+        raise IOError(9, 'Bad file descriptor')
 
     def read(self, n=-1):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
-        raise IOError(9, "Bad file descriptor")
+            raise ValueError('I/O operation on closed file')
+        raise IOError(9, 'Bad file descriptor')
 
     def readlines(self, sizehint=0):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
-        raise IOError(9, "Bad file descriptor")
+            raise ValueError('I/O operation on closed file')
+        raise IOError(9, 'Bad file descriptor')
 
     def readline(self, length=None):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
-        raise IOError(9, "Bad file descriptor")
+            raise ValueError('I/O operation on closed file')
+        raise IOError(9, 'Bad file descriptor')
 
     def flush(self):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
-        raise IOError(9, "Bad file descriptor")
+            raise ValueError('I/O operation on closed file')
+        raise IOError(9, 'Bad file descriptor')
 
     def __next__(self):
         if self.closed:
@@ -169,11 +161,12 @@ class IterIO(object):
 
 
 class IterI(IterIO):
+
     """Convert an stream into an iterator."""
 
-    def __new__(cls, func, sentinel=""):
+    def __new__(cls, func, sentinel=''):
         if greenlet is None:
-            raise RuntimeError("IterI requires greenlet support")
+            raise RuntimeError('IterI requires greenlet support')
         stream = object.__new__(cls)
         stream._parent = greenlet.getcurrent()
         stream._buffer = []
@@ -199,7 +192,7 @@ class IterI(IterIO):
 
     def write(self, s):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
+            raise ValueError('I/O operation on closed file')
         if s:
             self.pos += len(s)
             self._buffer.append(s)
@@ -210,7 +203,7 @@ class IterI(IterIO):
 
     def flush(self):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
+            raise ValueError('I/O operation on closed file')
         self._flush_impl()
 
     def _flush_impl(self):
@@ -223,9 +216,10 @@ class IterI(IterIO):
 
 
 class IterO(IterIO):
+
     """Iter output.  Wrap an iterator and give it a stream like interface."""
 
-    def __new__(cls, gen, sentinel=""):
+    def __new__(cls, gen, sentinel=''):
         self = object.__new__(cls)
         self._gen = gen
         self._buf = None
@@ -238,8 +232,8 @@ class IterO(IterIO):
         return self
 
     def _buf_append(self, string):
-        """Replace string directly without appending to an empty string,
-        avoiding type issues."""
+        '''Replace string directly without appending to an empty string,
+        avoiding type issues.'''
         if not self._buf:
             self._buf = string
         else:
@@ -248,12 +242,12 @@ class IterO(IterIO):
     def close(self):
         if not self.closed:
             self.closed = True
-            if hasattr(self._gen, "close"):
+            if hasattr(self._gen, 'close'):
                 self._gen.close()
 
     def seek(self, pos, mode=0):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
+            raise ValueError('I/O operation on closed file')
         if mode == 1:
             pos += self.pos
         elif mode == 2:
@@ -261,10 +255,10 @@ class IterO(IterIO):
             self.pos = min(self.pos, self.pos + pos)
             return
         elif mode != 0:
-            raise IOError("Invalid argument")
+            raise IOError('Invalid argument')
         buf = []
         try:
-            tmp_end_pos = len(self._buf or "")
+            tmp_end_pos = len(self._buf)
             while pos > tmp_end_pos:
                 item = next(self._gen)
                 tmp_end_pos += len(item)
@@ -277,10 +271,10 @@ class IterO(IterIO):
 
     def read(self, n=-1):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
+            raise ValueError('I/O operation on closed file')
         if n < 0:
             self._buf_append(_mixed_join(self._gen, self.sentinel))
-            result = self._buf[self.pos :]
+            result = self._buf[self.pos:]
             self.pos += len(result)
             return result
         new_pos = self.pos + n
@@ -301,13 +295,13 @@ class IterO(IterIO):
 
         new_pos = max(0, new_pos)
         try:
-            return self._buf[self.pos : new_pos]
+            return self._buf[self.pos:new_pos]
         finally:
             self.pos = min(new_pos, len(self._buf))
 
     def readline(self, length=None):
         if self.closed:
-            raise ValueError("I/O operation on closed file")
+            raise ValueError('I/O operation on closed file')
 
         nl_pos = -1
         if self._buf:
@@ -341,7 +335,7 @@ class IterO(IterIO):
         if length is not None and self.pos + length < new_pos:
             new_pos = self.pos + length
         try:
-            return self._buf[self.pos : new_pos]
+            return self._buf[self.pos:new_pos]
         finally:
             self.pos = min(new_pos, len(self._buf))
 

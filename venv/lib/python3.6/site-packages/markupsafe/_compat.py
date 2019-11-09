@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-markupsafe._compat
-~~~~~~~~~~~~~~~~~~
+    markupsafe._compat
+    ~~~~~~~~~~~~~~~~~~
 
-:copyright: 2010 Pallets
-:license: BSD-3-Clause
+    Compatibility module for different Python versions.
+
+    :copyright: (c) 2013 by Armin Ronacher.
+    :license: BSD, see LICENSE for more details.
 """
 import sys
 
@@ -15,19 +17,10 @@ if not PY2:
     string_types = (str,)
     unichr = chr
     int_types = (int,)
-
-    def iteritems(x):
-        return iter(x.items())
-
-    from collections.abc import Mapping
-
+    iteritems = lambda x: iter(x.items())
 else:
     text_type = unicode
     string_types = (str, unicode)
     unichr = unichr
     int_types = (int, long)
-
-    def iteritems(x):
-        return x.iteritems()
-
-    from collections import Mapping
+    iteritems = lambda x: x.iteritems()

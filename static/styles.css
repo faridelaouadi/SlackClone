@@ -1,0 +1,32 @@
+#msg-list {
+    height: 80vh;
+    overflow: auto;
+}
+
+#channel-list {
+    height: 80vh;
+    overflow: auto;
+}
+
+.list-group-mine .list-group-item {
+    position: relative;
+    margin-left: auto;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #A8DDFD;
+    width: 50%;
+    height: 50px;
+    text-align: left;
+    font: 400 .9em 'Open Sans', sans-serif;
+    border: 1px solid #97C6E3;
+    border-radius: 10px;
+}
+
+
+.list-group-mine .list-group-item:hover {
+  background-color: #60AFFE;
+}
+
+.input-style{
+  margin-right:10px;
+}

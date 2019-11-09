@@ -14,21 +14,24 @@ r"""
     This module was introduced in 0.6.1 and is not a public interface.
     It might become one in later versions of Werkzeug.
 
-    :copyright: 2007 Pallets
-    :license: BSD-3-Clause
+    :copyright: (c) 2014 by the Werkzeug Team, see AUTHORS for more details.
+    :license: BSD, see LICENSE for more details.
 """
-import errno
-import os
-import random
 import sys
+import os
+import errno
 import time
+import random
 
 from ._compat import to_unicode
 from .filesystem import get_filesystem_encoding
 
-can_rename_open_file = False
 
-if os.name == "nt":
+can_rename_open_file = False
+if os.name == 'nt':  # pragma: no cover
+    _rename = lambda src, dst: False
+    _rename_atomic = lambda src, dst: False
+
     try:
         import ctypes
 
@@ -44,9 +47,8 @@ if os.name == "nt":
             retry = 0
             rv = False
             while not rv and retry < 100:
-                rv = _MoveFileEx(
-                    src, dst, _MOVEFILE_REPLACE_EXISTING | _MOVEFILE_WRITE_THROUGH
-                )
+                rv = _MoveFileEx(src, dst, _MOVEFILE_REPLACE_EXISTING |
+                                 _MOVEFILE_WRITE_THROUGH)
                 if not rv:
                     time.sleep(0.001)
                     retry += 1
@@ -60,21 +62,16 @@ if os.name == "nt":
         can_rename_open_file = True
 
         def _rename_atomic(src, dst):
-            ta = _CreateTransaction(None, 0, 0, 0, 0, 1000, "Werkzeug rename")
+            ta = _CreateTransaction(None, 0, 0, 0, 0, 1000, 'Werkzeug rename')
             if ta == -1:
                 return False
             try:
                 retry = 0
                 rv = False
                 while not rv and retry < 100:
-                    rv = _MoveFileTransacted(
-                        src,
-                        dst,
-                        None,
-                        None,
-                        _MOVEFILE_REPLACE_EXISTING | _MOVEFILE_WRITE_THROUGH,
-                        ta,
-                    )
+                    rv = _MoveFileTransacted(src, dst, None, None,
+                                             _MOVEFILE_REPLACE_EXISTING |
+                                             _MOVEFILE_WRITE_THROUGH, ta)
                     if rv:
                         rv = _CommitTransaction(ta)
                         break
@@ -84,14 +81,8 @@ if os.name == "nt":
                 return rv
             finally:
                 _CloseHandle(ta)
-
     except Exception:
-
-        def _rename(src, dst):
-            return False
-
-        def _rename_atomic(src, dst):
-            return False
+        pass
 
     def rename(src, dst):
         # Try atomic or pseudo-atomic rename
@@ -103,15 +94,13 @@ if os.name == "nt":
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
-            old = "%s-%08x" % (dst, random.randint(0, sys.maxsize))
+            old = "%s-%08x" % (dst, random.randint(0, sys.maxint))
             os.rename(dst, old)
             os.rename(src, dst)
             try:
                 os.unlink(old)
             except Exception:
                 pass
-
-
 else:
     rename = os.rename
     can_rename_open_file = True
