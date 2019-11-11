@@ -19,7 +19,7 @@ const init = username => {
     });
 
     socket.on("new user", data => {
-      
+
         show_new_user(data.username);
 
     });
@@ -50,10 +50,12 @@ const init = username => {
 };
 
 const setup = socket => {
-  let channel_form = document.querySelector("#channel-form");
-  let channel_name_inp = document.querySelector("#channel-name");
+  let channel_form = document.querySelector("#newChannel-form");
+  let channel_name_inp = document.querySelector("#channel_name");
   let msg_inp = document.querySelector("#msg-text");
   let msg_form = document.querySelector("#msg-form");
+
+
 
   channel_form.addEventListener("submit", e => {
     // no reload
@@ -69,6 +71,7 @@ const setup = socket => {
     socket.emit("new channel", { name });
 
     channel_name_inp.value = "";
+    $('#newChannelModal').modal('hide');
   });
 
   msg_form.addEventListener("submit", e => {
@@ -196,12 +199,13 @@ const show_msg = data => {
   }
 };
 
+
 const get_username = () => {
   let username = localStorage.getItem("username");
 
   if (!username) {
     //if the user has no username in local storage, then lets get it.
-    $(".modal").modal({ show: true, backdrop: "static" });
+    $("#usernameModal").modal({ show: true, backdrop: "static" });
 
     document.querySelector("#username-form").addEventListener("submit", e => {
       e.preventDefault(); //prevents the default action from happening
@@ -214,11 +218,11 @@ const get_username = () => {
         username = username.trim(); //removes whitespace from the string
         if (username == "") {
           username = null;
-          $('#modal-title-1').text("Please enter your username below");
+          $('#usernameModal-title-1').text("Please enter your username below");
           //add text on the modal to let the user know they need to enter someting in the modal
         } else {
           localStorage.setItem("username", username);
-          $(".modal").modal("hide");
+          $("#usernameModal").modal("hide");
           //set the username in local storage to make it like sessions
 
           init(username);

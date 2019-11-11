@@ -46,14 +46,9 @@
             <div class="col-sm-3">
                 <h1>Channels</h1>
                 <ul id="channel-list" class="list-group"></ul>
-                <form id="channel-form" class="mt-3 mb-3">
                     <div class="input-group">
-                        <input type="text" id="channel-name" class="form-control input-style" placeholder="Enter channel name..." >
-                        <div class="input-group-append">
-                            <button id="add-channel" class="btn btn-primary" type="submit">+ New</button>
-                        </div>
+                            <button id="add-channel" class="btn btn-primary" data-toggle="modal" data-target="#newChannelModal">+ New</button>
                     </div>
-                </form>
             </div>
 
             <div class=col-sm-9>
@@ -77,7 +72,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal-title-1">Enter your name here: </h5>
+                    <h5 class="modal-title" id="usernameModal-title-1">Enter your name here: </h5>
                 </div>
                 <div class="modal-body">
                     <form id="username-form">
@@ -89,6 +84,35 @@
             </div>
         </div>
     </div>
+
+    <!-- This is the modal to get the username from the user.  -->
+    <div class="modal show" id="newChannelModal" tabindex="1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newChannelModal-title-1">Channel Creation form</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="newChannel-form">
+                        <input class="form-control" type="text" name="channel_name" id="channel_name">
+
+                        <div class="radio">
+                          <label><input type="radio" name="public" checked> Public</label>
+                        </div>
+                        <div class="radio">
+                          <label><input type="radio" name="private" > Private</label>
+                        </div>
+                        <p id="channel_security_info">Public channels can be viewed by everyone on the server. Messages are NOT end to end encrypted. </p>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-primary">Create Channel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 
 
