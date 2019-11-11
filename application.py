@@ -14,7 +14,7 @@ socketio = SocketIO(app)
 
 # in-memory data
 USERS = {}
-CHANNELS = {"general": deque([], maxlen=100)}
+CHANNELS = {"General": deque([], maxlen=100)}
 
 @app.route("/")
 def index():
@@ -27,7 +27,10 @@ def connection():
 @socketio.on('userdata')
 def user_data(data):
     if 'username' in data:
-        USERS[data['username']] = request.sid #request socket ID
+        username = data['username']
+        print(f"username of the new user is {username}")
+        USERS[username] = request.sid #request socket ID
+        emit('new user', data, broadcast=True)
 
 @socketio.on('new channel')
 def new_channel(data):

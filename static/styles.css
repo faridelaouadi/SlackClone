@@ -1,6 +1,8 @@
 #msg-list {
     height: 80vh;
     overflow: auto;
+    position:relative;
+    padding-top: 30px;
 }
 
 #channel-list {
@@ -21,6 +23,7 @@
     font: 400 .9em 'Open Sans', sans-serif;
     border: 1px solid #97C6E3;
     border-radius: 10px;
+    overflow: auto;
 }
 
 
@@ -42,9 +45,11 @@
     height: 50px;
     text-align: left;
     font: 400 .9em 'Open Sans', sans-serif;
-    border: 1px solid #97C6E3;
+    border: 1px solid #00CD00;
     border-radius: 10px;
+    overflow: auto;
 }
 
 .list-group-sender:hover {
   background-color: #00CD00;
+}

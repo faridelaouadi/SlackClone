@@ -18,6 +18,12 @@ const init = username => {
       show_channel(data.name, socket);
     });
 
+    socket.on("new user", data => {
+      
+        show_new_user(data.username);
+
+    });
+
     socket.on("msg", data => {
       show_msg(data);
     });
@@ -31,6 +37,7 @@ const init = username => {
       // initial active channel
       show_active_channel(localStorage.getItem("channel"));
       change_msg_title(localStorage.getItem("channel"));
+
     });
 
     socket.on("msgs", data => {
@@ -96,6 +103,15 @@ const setup = socket => {
     socket.emit("get msgs", { name: localStorage.getItem("channel") });
   }
 };
+
+const show_new_user = (username) =>{
+
+  document.getElementById("toast_message").innerHTML = username + " joined the server";
+  $("#myToast").toast({
+        delay: 5000
+    });
+  $("#myToast").toast('show');
+}
 
 const show_channel = (name, socket) => {
   // grab ul that displays channels
