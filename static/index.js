@@ -153,9 +153,11 @@ const show_msg = data => {
     let ul = document.querySelector("#msg-list");
     let li = document.createElement("li");
 
-    li.classList.add("list-group-item");
+
 
     if (localStorage.getItem("username") === data.username){
+      //if i sent the message
+      li.classList.add("list-group-item");
       li.innerHTML = `<strong class="d-flex justify-content-end">${
         data.msg
       } </strong><small class="text-muted d-flex justify-content-end">${get_date_string(
@@ -163,9 +165,11 @@ const show_msg = data => {
       )}</small>`;
 
     }else{
+      //if the message is from someone else.
+      li.classList.add("list-group-sender");
       li.innerHTML = `<strong>${data.username}</strong>: ${
         data.msg
-      } <small class="text-muted d-flex ">${get_date_string(
+      } <small class="text-muted d-flex justify-content-start">${get_date_string(
         data.created_at
       )}</small>`;
     }

@@ -10,7 +10,8 @@
 
 .list-group-mine .list-group-item {
     position: relative;
-    margin-left: auto;
+    margin-right: 0;
+    margin-left:auto;
     margin-bottom: 10px;
     padding: 10px;
     background-color: #A8DDFD;
@@ -30,3 +31,20 @@
 .input-style{
   margin-right:10px;
 }
+
+.list-group-sender {
+    position: relative;
+    margin-right: auto;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #CCFFCC;
+    width: 50%;
+    height: 50px;
+    text-align: left;
+    font: 400 .9em 'Open Sans', sans-serif;
+    border: 1px solid #97C6E3;
+    border-radius: 10px;
+}
+
+.list-group-sender:hover {
+  background-color: #00CD00;
