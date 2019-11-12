@@ -49,7 +49,6 @@
     font: 400 .9em 'Open Sans', sans-serif;
     border: 1px solid #00CD00;
     border-radius: 10px;
-    overflow: auto;
 }
 
 .list-group-sender:hover {
