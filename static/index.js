@@ -149,6 +149,7 @@ const change_msg_title = title_name => {
 
 const show_active_channel = name => {
   document.querySelectorAll("#channel-list > li").forEach(e => {
+    //select all the elements that are children of the channel list
     if (e.innerHTML == name) {
       e.classList.add("active");
     } else {
@@ -203,7 +204,7 @@ const show_msg = data => {
 const get_username = () => {
 
   let username = localStorage.getItem("username");
-  
+
   if (!username) {
     //if the user has no username in local storage, then lets get it.
     $("#usernameModal").modal({ show: true, backdrop: "static" });
