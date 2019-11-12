@@ -19,8 +19,8 @@ const init = username => {
     });
 
     socket.on("new user", data => {
-
-        show_new_user(data.username);
+        console.log("new user in this bitchhhhhh with name ---->  " + data.username);
+        //show_new_user(data.username);
 
     });
 
@@ -52,6 +52,7 @@ const init = username => {
 const setup = socket => {
   let channel_form = document.querySelector("#newChannel-form");
   let channel_name_inp = document.querySelector("#channel_name");
+  let channel_status_inp = document.querySelector("#channel_status");
   let msg_inp = document.querySelector("#msg-text");
   let msg_form = document.querySelector("#msg-form");
 
@@ -62,6 +63,7 @@ const setup = socket => {
     e.preventDefault();
 
     let name = channel_name_inp.value;
+    let status = channel_status_inp.value;
 
     if (!name) {
       console.log("no name");
@@ -71,6 +73,7 @@ const setup = socket => {
     socket.emit("new channel", { name });
 
     channel_name_inp.value = "";
+    channel_status_inp.value = "";
     $('#newChannelModal').modal('hide');
   });
 
