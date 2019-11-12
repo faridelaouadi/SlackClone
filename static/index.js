@@ -201,8 +201,9 @@ const show_msg = data => {
 
 
 const get_username = () => {
-  let username = localStorage.getItem("username");
 
+  let username = localStorage.getItem("username");
+  
   if (!username) {
     //if the user has no username in local storage, then lets get it.
     $("#usernameModal").modal({ show: true, backdrop: "static" });
