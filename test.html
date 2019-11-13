@@ -14,11 +14,10 @@
 
   </head>
   <body>
-    <form id="myForm">
-      <input type="radio" name="radioName" value="1" /> 1 <br />
-      <input type="radio" name="radioName" value="2" /> 2 <br />
-      <input type="radio" name="radioName" value="3" /> 3 <br />
-    </form>
+    <input id="input" type="text"/>
+    <button id="copy">Copy</button>
+
+
 
 
 
@@ -29,13 +28,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script>
-          $(document).ready(function() {
-          //set initial state.
-          $('#myForm input').on('change', function() {
-             console.log($('input[name=radioName]:checked', '#myForm').val()); 
-          });
-      });
+    function copy() {
+var copyText = document.querySelector("#input");
+copyText.select();
+document.execCommand("copy");
+}
 
+document.querySelector("#copy").addEventListener("click", copy);
 
     </script>
 

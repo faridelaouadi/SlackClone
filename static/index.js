@@ -2,7 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
   get_username(); //when the user first logs in, they are prompted to enter their username
 });
 
+
 const init = username => {
+
   //after the username is entered, lets start the socket
   let socket = io.connect(
     location.protocol + "//" + document.domain + ":" + location.port
@@ -166,7 +168,7 @@ const show_user_in_list = (name,socket) => {
   //add the condition for when the username is me
   li.addEventListener("click", () => {
     console.log("you clicked " + name);
-    //this would be where we would open a modal to create a direct message. 
+    //this would be where we would open a modal to create a direct message.
 });
   ul.appendChild(li);
 };
@@ -215,14 +217,16 @@ const clear_msgs = () => {
 
 const show_msg = data => {
   if (localStorage.getItem("channel") == data.channel) {
+    let x = "hello world ";
     let ul = document.querySelector("#msg-list");
     let li = document.createElement("li");
-
+    li.addEventListener("mousedown", function(){mouseClick_handler(event, data)}, false);
 
 
     if (localStorage.getItem("username") === data.username){
       //if i sent the message
       li.classList.add("list-group-item");
+
       li.innerHTML = `<strong class="d-flex justify-content-end">${
         data.msg
       } </strong><small class="text-muted d-flex justify-content-end">${get_date_string(
@@ -245,6 +249,20 @@ const show_msg = data => {
   }
 };
 
+
+var mouseClick_handler = function (e, data) {
+    // event and extra_data will be available here
+    e = e || window.event;
+    switch (e.which) {
+      //these are the three mouseDown events
+      //case 1 -> left click
+      //case 3 -> right click
+     case 1:
+            document.querySelector("#MessageOptionsModalTitle").innerHTML= data.username + " :  \"" + data.msg + "\"";
+            $("#MessageOptions").modal({ show: true, backdrop: "static" });
+            break;
+   }
+  };
 
 //function to get the username from the user through using a modal
 const get_username = () => {
@@ -282,6 +300,20 @@ const get_username = () => {
     init(username);
   }
 };
+
+function copyToClipboard(){
+  // Create new element
+  console.log("entering the clipbaord function")
+  var tempInput = document.createElement('INPUT');
+  document.body.appendChild(tempInput);
+  tempInput.setAttribute('value', "wa zebi wa zebi wa zebiiii")
+  tempInput.select();
+  console.log(x)
+  document.execCommand('copy');
+  document.body.removeChild(tempInput);
+  console.log("finished the function")
+
+}
 
 const get_date_string = time => {
   time = new Date(time * 1000);

@@ -44,7 +44,7 @@
 
     <div class="container-fluid" style="margin-top: 20px;">
         <div class="row">
-            <div class="col-sm-3" style="border-right: 2px solid red;">
+            <div class="col-sm-3" style="border-right: 2px solid #63D1F4;">
                 <h1>Channels</h1>
                 <ul id="channel-list" class="list-group"></ul>
                     <div class="input-group">
@@ -66,7 +66,7 @@
                 </form>
             </div>
 
-            <div class="col-sm-3" style="border-left: 2px solid red;">
+            <div class="col-sm-3" style="border-left: 2px solid #63D1F4;">
                 <h1>Active Users</h1>
                 <div id="user-list"></div>
                     <div class="input-group">
@@ -133,12 +133,32 @@
                 </div>
                 <div class="modal-body">
                     <form id="newChannel-form">
-                        <input class="form-control" type="text" name="channel_name" id="channel_name">
-                        <input class="form-control" type="text" name="channel_name" placeholder="Enter optional message here..." id="channel_name">
-                        <button type="submit" class="btn btn-primary">Send invite</button>
+                        <input class="form-control" autocomplete="off" type="text" name="channel_name" placeholder="Recipient Email address" id="channel_name">
+                        <input class="form-control" autocomplete="off" type="text" style="margin-top:10px;" name="channel_name" placeholder="Enter optional message here..." id="channel_name">
+                        <button type="submit" class="btn btn-primary" style="margin-top:10px; float:right;">Send invite</button>
                         </div>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- This is the modal to invite users  -->
+    <div class="modal show" id="MessageOptions" tabindex="1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="MessageOptionsModalTitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" onclick="copyToClipboard()">Copy Message</button>
+                    <button type="button" class="btn btn-secondary btn-lg btn-block">Star Message</button>
+                    <button type="button" class="btn btn-secondary btn-lg btn-block">Delete Message</button>
+                </div>
+
             </div>
         </div>
     </div>
