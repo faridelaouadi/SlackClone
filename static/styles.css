@@ -12,6 +12,11 @@
     overflow: auto;
 }
 
+#user-list {
+    height: 30vh;
+    overflow: auto;
+}
+
 .list-group-mine .list-group-item {
     position: relative;
     margin-right: 10px;

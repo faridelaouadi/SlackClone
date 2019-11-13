@@ -237,14 +237,12 @@ const get_username = () => {
 
           $("#usernameModal").modal("hide");
           //set the username in local storage to make it like sessions
-          localStorage.setItem("channel", "General");
           init(username);
           //call the init function to start the app
         }
       }
     });
   } else {
-    localStorage.setItem("channel", "General");
     init(username);
   }
 };
