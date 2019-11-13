@@ -19,8 +19,8 @@ const init = username => {
     });
 
     socket.on("new user", data => {
-
-        show_new_user(data.username);
+        console.log("new user was added");
+      //  show_new_user(data.username);
 
     });
 
@@ -31,6 +31,7 @@ const init = username => {
     socket.on("channels", data => {
       clear_channels();
       for (let c of data) {
+        console.log("we got a channel from the server called --> " + c)
         show_channel(c, socket);
       }
 
@@ -107,14 +108,6 @@ const setup = socket => {
   }
 };
 
-const show_new_user = (username) =>{
-
-  document.getElementById("toast_message").innerHTML = username + " joined the server";
-  $("#myToast").toast({
-        delay: 5000
-    });
-  $("#myToast").toast('show');
-}
 
 const show_channel = (name, socket) => {
   // grab ul that displays channels
@@ -201,6 +194,7 @@ const show_msg = data => {
 };
 
 
+//function to get the username from the user through using a modal
 const get_username = () => {
 
   let username = localStorage.getItem("username");
