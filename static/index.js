@@ -15,7 +15,7 @@ const init = username => {
     setup(socket);
 
     socket.on("new channel", data => {
-      show_channel(data.name, socket);
+      show_channel(data.name, data.channel_status, socket);
     });
 
     socket.on("new user", data => {
@@ -29,9 +29,12 @@ const init = username => {
 
     socket.on("channels", data => {
       clear_channels();
-      for (let c of data) {
-        console.log("we got a channel from the server called --> " + c)
-        show_channel(c, socket);
+      for (let object of data) {
+        let name = object[0];
+        let status = object[1];
+        console.log("we got a channel from the server called --> " + name)
+        console.log("The channel has status ---> " + status)
+        show_channel(name , status, socket);
       }
 
       // initial active channel
@@ -65,16 +68,17 @@ const setup = socket => {
     let name = channel_name_inp.value;
     let status = channel_status_inp.value;
 
-    if (!name) {
-      console.log("no name");
+    if (!name || !status) {
+      console.log("no name provided for the new channel");
+      document.querySelector("#newChannelErrorMessage").innerHTML = 'Please enter a name and Status for the new channel!';
       return;
     }
 
-    socket.emit("new channel", { name });
-
+    socket.emit("new channel", { name:name, channel_status:status });
     channel_name_inp.value = "";
     channel_status_inp.value = "";
     $('#newChannelModal').modal('hide');
+    document.querySelector("#newChannelErrorMessage").innerHTML = ''; //remove the warning message from the top of modal!
   });
 
   msg_form.addEventListener("submit", e => {
@@ -111,7 +115,7 @@ const setup = socket => {
 };
 
 
-const show_channel = (name, socket) => {
+const show_channel = (name,channel_status, socket) => {
   // grab ul that displays channels
   let ul = document.querySelector("#channel-list");
 
@@ -127,6 +131,8 @@ const show_channel = (name, socket) => {
 
     change_msg_title(name);
 
+    change_msg_status(channel_status)
+
     // color active channel
     show_active_channel(name);
   });
@@ -139,6 +145,14 @@ const change_msg_title = title_name => {
   if (title_name) {
     let title = document.querySelector("#channel-label");
     title.innerHTML = '<span class="text-muted"># </span>' + title_name;
+  }
+};
+
+const change_msg_status = channel_status => {
+  // change title
+  if (channel_status) {
+    let status = document.querySelector("#channel-status");
+    status.innerHTML = '<span class="text-muted"># </span>' + channel_status;
   }
 };
 
@@ -220,15 +234,17 @@ const get_username = () => {
           //add text on the modal to let the user know they need to enter someting in the modal
         } else {
           localStorage.setItem("username", username);
+
           $("#usernameModal").modal("hide");
           //set the username in local storage to make it like sessions
-
+          localStorage.setItem("channel", "General");
           init(username);
           //call the init function to start the app
         }
       }
     });
   } else {
+    localStorage.setItem("channel", "General");
     init(username);
   }
 };

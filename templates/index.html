@@ -24,13 +24,9 @@
 
 <body>
 
-<<<<<<< HEAD
-    <!-- This is the toast to display the new users 
-    <div class="toast"  role="alert" aria-hidden="true" id="myToast" aria-atomic="true" style="position: absolute; top: 0; right: 0; margin-right:50px; margin-top:20px;">
-=======
 
-    <!--<div class="toast"  role="alert" aria-hidden="true" id="myToast" aria-atomic="true" style="position: absolute; top: 0; right: 0; margin-right:50px; margin-top:20px;">
->>>>>>> 9b4d83c13951efc6c48fcb5bdb7e70409b6bf283
+    <!-- This is the toast to display the new users
+    <div class="toast"  role="alert" aria-hidden="true" id="myToast" aria-atomic="true" style="position: absolute; top: 0; right: 0; margin-right:50px; margin-top:20px;">
       <div class="toast-header">
         <svg class=" rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
                       <rect fill="#007aff" width="100%" height="100%" /></svg>
@@ -57,7 +53,8 @@
             </div>
 
             <div class=col-sm-6>
-                <h1 id="channel-label">Messages</h1>
+                <h1 id="channel-label">Channel Title</h1>
+                <h6 id="channel-status">Status Goes here</h6>
                 <ul id="msg-list" class="list-group list-group-mine"></ul>
                 <form id="msg-form" class="mt-3 mb-3">
                     <div class="input-group">
@@ -89,7 +86,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="username-form">
-                        <input class="form-control" type="text" name="username" id="username-text">
+                        <input class="form-control" autocomplete="off" type="text" name="username" id="username-text">
                         <hr>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>
@@ -103,10 +100,12 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+
                     <h5 class="modal-title" id="newChannelModal-title-1">Channel Creation form</h5>
                 </div>
                 <div class="modal-body">
                     <form id="newChannel-form">
+                        <p id="newChannelErrorMessage" style="color:red;"></p>
                         <input class="form-control" autocomplete="off" type="text" name="channel_name" placeholder="Enter channel name here..." id="channel_name" style="margin-bottom:5px;">
                         <input class="form-control" autocomplete="off" type="text" name="channel_status" placeholder="Enter channel status here..." id="channel_status">
                         <div class="modal-footer">
@@ -118,7 +117,7 @@
         </div>
     </div>
 
-    <!-- This is the modal to Create new channel  -->
+    <!-- This is the modal to invite users  -->
     <div class="modal show" id="sendUserInvite" tabindex="1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
