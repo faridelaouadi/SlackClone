@@ -24,8 +24,13 @@
 
 <body>
 
+<<<<<<< HEAD
     <!-- This is the toast to display the new users 
     <div class="toast"  role="alert" aria-hidden="true" id="myToast" aria-atomic="true" style="position: absolute; top: 0; right: 0; margin-right:50px; margin-top:20px;">
+=======
+
+    <!--<div class="toast"  role="alert" aria-hidden="true" id="myToast" aria-atomic="true" style="position: absolute; top: 0; right: 0; margin-right:50px; margin-top:20px;">
+>>>>>>> 9b4d83c13951efc6c48fcb5bdb7e70409b6bf283
       <div class="toast-header">
         <svg class=" rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
                       <rect fill="#007aff" width="100%" height="100%" /></svg>
@@ -102,12 +107,8 @@
                 </div>
                 <div class="modal-body">
                     <form id="newChannel-form">
-                        <input class="form-control" type="text" name="channel_name" id="channel_name">
-
-                        <input type="radio" name="privacyRadio" value="public"/> Public
-                        <input type="radio" name="privacyRadio" value="private"/> Private
-                      </br>
-                        <p id="channel_security_info">Public channels can be access by anyone on the server. Messages are not end to end encrypted. Private channels are invite-only and all communication is end to end encrypted.</p>
+                        <input class="form-control" autocomplete="off" type="text" name="channel_name" placeholder="Enter channel name here..." id="channel_name" style="margin-bottom:5px;">
+                        <input class="form-control" autocomplete="off" type="text" name="channel_status" placeholder="Enter channel status here..." id="channel_status">
                         <div class="modal-footer">
                           <button type="submit" class="btn btn-primary">Create Channel</button>
                         </div>
