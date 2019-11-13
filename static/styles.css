@@ -17,6 +17,11 @@
     overflow: auto;
 }
 
+.active-users{
+  margin-right: 5px;
+  font-size: 20px;
+}
+
 .list-group-mine .list-group-item {
     position: relative;
     margin-right: 10px;

@@ -161,9 +161,13 @@ const show_user_in_list = (name,socket) => {
   var colors = Array("primary", "secondary", "success", "danger", "warning", "info");
   var color_choice = colors[Math.floor(Math.random()*colors.length)];
   li.classList.add("badge-"+color_choice); //to make the color selection random to make the ui look more interesting
+  li.classList.add("active-users")
   li.innerHTML = name;
   //add the condition for when the username is me
-
+  li.addEventListener("click", () => {
+    console.log("you clicked " + name);
+    //this would be where we would open a modal to create a direct message. 
+});
   ul.appendChild(li);
 };
 
