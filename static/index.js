@@ -37,10 +37,19 @@ const init = username => {
         show_channel(name , status, socket);
       }
 
+
+
       // initial active channel
       show_active_channel(localStorage.getItem("channel"));
       change_msg_title(localStorage.getItem("channel"));
 
+    });
+
+    socket.on("users", data => {
+      clear_users();
+      for (let name of data) {
+        show_user_in_list(name, socket);
+      }
     });
 
     socket.on("msgs", data => {
@@ -108,6 +117,7 @@ const setup = socket => {
   });
 
   socket.emit("get channels");
+  socket.emit("get users")
 
   if (localStorage.getItem("channel")) {
     socket.emit("get msgs", { name: localStorage.getItem("channel") });
@@ -136,6 +146,23 @@ const show_channel = (name,channel_status, socket) => {
     // color active channel
     show_active_channel(name);
   });
+
+  ul.appendChild(li);
+};
+
+const show_user_in_list = (name,socket) => {
+  // grab ul that displays channels
+  let ul = document.querySelector("#user-list");
+
+  let li = document.createElement("li");
+
+
+  li.classList.add("badge");
+  var colors = Array("primary", "secondary", "success", "danger", "warning", "info");
+  var color_choice = colors[Math.floor(Math.random()*colors.length)];
+  li.classList.add("badge-"+color_choice); //to make the color selection random to make the ui look more interesting
+  li.innerHTML = name;
+  //add the condition for when the username is me
 
   ul.appendChild(li);
 };
@@ -169,6 +196,11 @@ const show_active_channel = name => {
 
 const clear_channels = () => {
   let ul = document.querySelector("#channel-list");
+  ul.innerHTML = "";
+};
+
+const clear_users = () => {
+  let ul = document.querySelector("#user-list");
   ul.innerHTML = "";
 };
 

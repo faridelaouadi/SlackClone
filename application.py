@@ -56,6 +56,10 @@ def get_channels():
     #custom_list is a list of pairs of channel_name,channel_status
     emit('channels', custom_list)
 
+@socketio.on('get users')
+def get_users():
+    emit('users', list(USERS.keys()))
+
 @socketio.on('get msgs')
 def get_msgs(data):
     if 'name' in data:
