@@ -19,8 +19,7 @@ const init = username => {
     });
 
     socket.on("new user", data => {
-
-        show_new_user(data.username);
+        console.log("new user called " + data.username + " has just joined the server");
 
     });
 
