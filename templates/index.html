@@ -102,12 +102,8 @@
                 </div>
                 <div class="modal-body">
                     <form id="newChannel-form">
-                        <input class="form-control" type="text" name="channel_name" id="channel_name">
-
-                        <input type="radio" name="privacyRadio" value="public"/> Public
-                        <input type="radio" name="privacyRadio" value="private"/> Private
-                      </br>
-                        <p id="channel_security_info">Public channels can be access by anyone on the server. Messages are not end to end encrypted. Private channels are invite-only and all communication is end to end encrypted.</p>
+                        <input class="form-control" autocomplete="off" type="text" name="channel_name" placeholder="Enter channel name here..." id="channel_name" style="margin-bottom:5px;">
+                        <input class="form-control" autocomplete="off" type="text" name="channel_status" placeholder="Enter channel status here..." id="channel_status">
                         <div class="modal-footer">
                           <button type="submit" class="btn btn-primary">Create Channel</button>
                         </div>

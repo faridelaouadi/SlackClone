@@ -19,7 +19,12 @@ const init = username => {
     });
 
     socket.on("new user", data => {
+<<<<<<< HEAD
         console.log("new user called " + data.username + " has just joined the server");
+=======
+        console.log("new user in this bitchhhhhh with name ---->  " + data.username);
+        //show_new_user(data.username);
+>>>>>>> f75b89a167ccc3f6418f9c147943c94b5ec9e2ed
 
     });
 
@@ -51,6 +56,7 @@ const init = username => {
 const setup = socket => {
   let channel_form = document.querySelector("#newChannel-form");
   let channel_name_inp = document.querySelector("#channel_name");
+  let channel_status_inp = document.querySelector("#channel_status");
   let msg_inp = document.querySelector("#msg-text");
   let msg_form = document.querySelector("#msg-form");
 
@@ -61,6 +67,7 @@ const setup = socket => {
     e.preventDefault();
 
     let name = channel_name_inp.value;
+    let status = channel_status_inp.value;
 
     if (!name) {
       console.log("no name");
@@ -70,6 +77,7 @@ const setup = socket => {
     socket.emit("new channel", { name });
 
     channel_name_inp.value = "";
+    channel_status_inp.value = "";
     $('#newChannelModal').modal('hide');
   });
 
