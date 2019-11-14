@@ -81,14 +81,19 @@ def get_users():
 @socketio.on('get msgs')
 def get_msgs(data):
     if 'name' in data:
-
         #if its starred messages send the relevant messages
         emit('msgs', list(CHANNELS[data['name']][1]))
 
 @socketio.on('get starred messages')
 def get_starred_messages(data):
     if 'username' in data:
-        emit('starred messages', CHANNELS["Starred Messages"][1][data['username']])
+        try:
+            #send the starred messages
+            emit('starred messages', CHANNELS["Starred Messages"][1][data['username']])
+        except:
+            #if they do not have any, send an empty list
+            emit('starred messages', [["", "No messages have been starred", ""]])
+
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)) , debug = True)
