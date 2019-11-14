@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+
   get_username(); //when the user first logs in, they are prompted to enter their username
 });
-
 
 const init = username => {
 
@@ -26,6 +26,9 @@ const init = username => {
     });
 
     socket.on("msg", data => {
+      console.log("new message");
+      var audio = new Audio('static/message.mp3');
+      audio.play()
       show_msg(data);
     });
 
