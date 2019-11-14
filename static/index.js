@@ -1,5 +1,9 @@
-var audio = new Audio('static/message.mp3');
+var message_sound = new Audio('static/message.mp3');
+var ring_sound = new Audio('static/ring.mp3');
+var data_of_message_clicked;
+var socket
 
+// sound effects from notificationsounds.com
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -9,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const init = username => {
 
   //after the username is entered, lets start the socket
-  let socket = io.connect(
+  socket = io.connect(
     location.protocol + "//" + document.domain + ":" + location.port
   );
 
@@ -24,13 +28,14 @@ const init = username => {
     });
 
     socket.on("new user", data => {
+      //have the pill appear now
         console.log("new user called " + data.username + " has just joined the server");
 
     });
 
     socket.on("msg", data => {
       console.log("new message");
-      audio.play()
+      message_sound.play()
       show_msg(data);
     });
 
@@ -62,6 +67,13 @@ const init = username => {
       data.forEach(msg => {
         show_msg(msg);
       });
+    });
+
+    socket.on("starred messages", data => {
+      clear_msgs();
+      data.forEach(msg => {
+        show_starred_msg(msg);
+      })
     });
   });
 };
@@ -120,12 +132,15 @@ const setup = socket => {
     msg_inp.value = "";
   });
 
-  socket.emit("get channels");
+  socket.emit("get channels"); //get the channels from the server
   socket.emit("get users")
 
   if (localStorage.getItem("channel")) {
-    socket.emit("get msgs", { name: localStorage.getItem("channel") });
-  }
+    if (localStorage.getItem("channel") != "Starred Messages"){
+      socket.emit("get msgs", { name: localStorage.getItem("channel") });
+    }
+
+  };
 };
 
 
@@ -141,7 +156,15 @@ const show_channel = (name,channel_status, socket) => {
   li.addEventListener("click", () => {
     localStorage.setItem("channel", name);
 
-    socket.emit("get msgs", { name });
+    if (name != "Starred Messages"){
+      document.getElementById('msg-text').removeAttribute("disabled");
+      socket.emit("get msgs", { name });
+    }else{
+      //make the textbox disabled
+      document.getElementById('msg-text').setAttribute("disabled","disabled");
+      socket.emit("get starred messages", {username:localStorage.getItem("username")})
+    };
+
 
     change_msg_title(name);
 
@@ -192,6 +215,7 @@ const change_msg_status = channel_status => {
 };
 
 const show_active_channel = name => {
+  //this function makes the active channel blue on the LHS
   document.querySelectorAll("#channel-list > li").forEach(e => {
     //select all the elements that are children of the channel list
     if (e.innerHTML == name) {
@@ -217,9 +241,26 @@ const clear_msgs = () => {
   ul.innerHTML = "";
 };
 
+const show_starred_msg = data => {
+  console.log("We are trying to show some starred messages")
+  if (localStorage.getItem("channel") == "Starred Messages") {
+    let ul = document.querySelector("#msg-list");
+    //access the message list
+    let li = document.createElement("li");
+    //create new element of starred messages
+    li.classList.add("list-group-starred");
+    li.innerHTML = `<strong>${data[2]}</strong>: ${
+      data[1]
+    } <i class="material-icons md-light">star_border</i> <small class="text-muted d-flex justify-content-start">${data[0]}</small>`;
+    ul.appendChild(li);
+    // scroll msg-list
+    ul.scrollTop = ul.scrollHeight - ul.clientHeight;
+
+  };
+};
+
 const show_msg = data => {
   if (localStorage.getItem("channel") == data.channel) {
-    let x = "hello world ";
     let ul = document.querySelector("#msg-list");
     let li = document.createElement("li");
     li.addEventListener("mousedown", function(){click_on_message(event, data)}, false);
@@ -260,8 +301,10 @@ var click_on_message = function (e, data) {
       //case 1 -> left click
       //case 3 -> right click
      case 1:
+            data_of_message_clicked = data;
             document.querySelector("#MessageOptionsModalTitle").value= data.msg;
             $("#MessageOptions").modal({ show: true, backdrop: "static" });
+
             break;
    }
   };
@@ -300,9 +343,16 @@ const get_username = () => {
     });
   } else {
     init(username);
-  }
+  };
 };
 
+function starMessage(){
+  ring_sound.play();
+  socket.emit("new starred message", { username: localStorage.getItem("username"),
+                                      channel: data_of_message_clicked.channel,
+                                      username_of_message:data_of_message_clicked.username,
+                                      message_content: data_of_message_clicked.msg});
+};
 function copyToClipboard(){
   // Function to copy message to clipboard
   console.log("we will be copying : ----> " + document.getElementById("MessageOptionsModalTitle").value);
@@ -312,7 +362,7 @@ function copyToClipboard(){
   /* Copy the text inside the text field */
   document.execCommand("copy");
   copyText.blur();
-}
+};
 
 const get_date_string = time => {
   time = new Date(time * 1000);

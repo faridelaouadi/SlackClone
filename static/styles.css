@@ -5,6 +5,8 @@
     padding-top: 30px;
     border-radius: 25px;
     border: 1px solid black;
+    list-style-type: none;
+    list-style: none;
 }
 
 #channel-list {
@@ -63,6 +65,25 @@
 
 .list-group-sender:hover {
   background-color: #00CD00;
+}
+
+.list-group-starred {
+    position: relative;
+    margin-right: auto;
+    margin-left:auto;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fad25a;
+    width: 50%;
+    height: auto;
+    text-align: left;
+    font: 400 .9em 'Open Sans', sans-serif;
+    border: 1px solid #fbf1de;
+    border-radius: 10px;
+}
+
+.list-group-starred:hover {
+  background-color: #e1ba43;
 }
 
 

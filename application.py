@@ -14,7 +14,8 @@ socketio = SocketIO(app)
 
 # in-memory data
 USERS = {}
-CHANNELS = {"General": ["This is a general public forum",deque([], maxlen=100)], "Starred Messages":["A collection of all your starred messages",deque([], maxlen=100)]}
+CHANNELS = {"General": ["This is a general public forum",deque([], maxlen=100)], "Starred Messages":["A collection of all your starred messages",{}]}
+#starred messaged in the format {username:[(user,message,chat)...],...}
 #deque is used as it has fast pop and push access to each side. We will unlikely be randomly accessing elements hence we didnt choose to use a list
 
 @app.route("/")
@@ -24,6 +25,23 @@ def index():
 @socketio.on('connect')
 def connection():
     print("new user connected")
+
+@socketio.on('new starred message')
+def new_starred_message(data):
+    print("We have recived the request to add a new starred message to the user")
+    print(f"Chat: {data['channel']} \n Message: {data['message_content']} \n")
+    try:
+        #if the user already has starred messages, we access them
+        user_starred_messages = CHANNELS["Starred Messages"][1][data['username']]
+    except:
+        #if the user doesnt, we create the list of starred messages
+        CHANNELS["Starred Messages"][1][data['username']] = []
+        user_starred_messages = CHANNELS["Starred Messages"][1][data['username']]
+        #refactor these two lines
+    finally:
+        #we then append to that list the list of [channel,message_content,username_of_sender]
+        user_starred_messages.append([data['channel'],data['message_content'],data['username_of_message']])
+    print(f"the user now has the follwong starred messages {user_starred_messages}")
 
 @socketio.on('userdata')
 def user_data(data):
@@ -63,7 +81,14 @@ def get_users():
 @socketio.on('get msgs')
 def get_msgs(data):
     if 'name' in data:
+
+        #if its starred messages send the relevant messages
         emit('msgs', list(CHANNELS[data['name']][1]))
+
+@socketio.on('get starred messages')
+def get_starred_messages(data):
+    if 'username' in data:
+        emit('starred messages', CHANNELS["Starred Messages"][1][data['username']])
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)) , debug = True)

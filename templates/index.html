@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <!-- Google Material Design CSS -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
     <!-- BootStrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
@@ -45,7 +49,7 @@
     <div class="container-fluid" style="margin-top: 20px;">
         <div class="row">
             <div class="col-sm-3" style="border-right: 2px solid #63D1F4;">
-                <h1>Channels</h1>
+                <h1>Channels </h1>
                 <ul id="channel-list" class="list-group"></ul>
                     <div class="input-group">
                             <button id="add-channel" class="btn btn-primary" data-toggle="modal" data-target="#newChannelModal">+ New</button>
@@ -154,8 +158,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <button type="button" id="CopyMessageButton" class="btn btn-secondary btn-lg btn-block" onclick="copyToClipboard()">Copy Message</button>
-                    <button type="button" class="btn btn-secondary btn-lg btn-block">Star Message</button>
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" onclick="copyToClipboard()">Copy Message</button>
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" onclick="starMessage()">Star Message</button>
                     <button type="button" class="btn btn-secondary btn-lg btn-block">Delete Message</button>
                 </div>
 
