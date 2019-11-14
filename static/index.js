@@ -1,7 +1,9 @@
 var message_sound = new Audio('static/message.mp3');
 var ring_sound = new Audio('static/ring.mp3');
+var click = new Audio('static/button.mp3');
 var data_of_message_clicked;
-var socket
+var socket;
+var message_id;
 
 // sound effects from notificationsounds.com
 
@@ -24,7 +26,7 @@ const init = username => {
     setup(socket);
 
     socket.on("new channel", data => {
-      show_channel(data.name, data.channel_status, socket);
+      show_channel(data.name, data.channel_status);
     });
 
     socket.on("new user", data => {
@@ -36,7 +38,9 @@ const init = username => {
     socket.on("msg", data => {
       console.log("new message");
       message_sound.play()
+      data.id = message_id;
       show_msg(data);
+      message_id += 1;
     });
 
     socket.on("channels", data => {
@@ -44,7 +48,7 @@ const init = username => {
       for (let object of data) {
         let name = object[0];
         let status = object[1];
-        show_channel(name , status, socket);
+        show_channel(name , status);
       }
 
 
@@ -64,8 +68,11 @@ const init = username => {
 
     socket.on("msgs", data => {
       clear_msgs();
+      message_id = 0;
       data.forEach(msg => {
+        msg.id = message_id;
         show_msg(msg);
+        message_id += 1;
       });
     });
 
@@ -144,7 +151,7 @@ const setup = socket => {
 };
 
 
-const show_channel = (name,channel_status, socket) => {
+const show_channel = (name,channel_status) => {
   // grab ul that displays channels
   let ul = document.querySelector("#channel-list");
 
@@ -249,7 +256,7 @@ const show_starred_msg = data => {
     let li = document.createElement("li");
     //create new element of starred messages
     li.classList.add("list-group-starred");
-    li.innerHTML = `<strong>${data[2]}</strong>: ${
+    li.innerHTML = `<strong>${data[2]}</strong> ${
       data[1]
     } <i class="material-icons md-light">star_border</i> <small class="text-muted d-flex justify-content-start">${data[0]}</small>`;
     ul.appendChild(li);
@@ -302,6 +309,7 @@ var click_on_message = function (e, data) {
       //case 3 -> right click
      case 1:
             data_of_message_clicked = data;
+            console.log("you pressed the message with id --> "+ data_of_message_clicked.id);
             document.querySelector("#MessageOptionsModalTitle").value= data.msg;
             $("#MessageOptions").modal({ show: true, backdrop: "static" });
 
@@ -347,6 +355,7 @@ const get_username = () => {
 };
 
 function starMessage(){
+  $("#MessageOptions").modal("hide");
   ring_sound.play();
   socket.emit("new starred message", { username: localStorage.getItem("username"),
                                       channel: data_of_message_clicked.channel,
@@ -355,13 +364,26 @@ function starMessage(){
 };
 function copyToClipboard(){
   // Function to copy message to clipboard
-  console.log("we will be copying : ----> " + document.getElementById("MessageOptionsModalTitle").value);
+  $("#MessageOptions").modal("hide");
+  click.play();
   var copyText = document.getElementById("MessageOptionsModalTitle");
   /* Select the text field */
   copyText.select();
   /* Copy the text inside the text field */
   document.execCommand("copy");
   copyText.blur();
+};
+function deleteMessage(){
+  //we have the data_of_message_clicked as a global variable and can access the message were deleting by using the data_of_message_clicked.id
+  $("#MessageOptions").modal("hide");
+  click.play();
+  console.log("we are trying to delete the message");
+  socket.emit("delete message", data_of_message_clicked);
+  socket.emit("get msgs", { name: localStorage.getItem("channel") });
+  // so what we do, is basically let the server know which message was deleted
+  // then refresh the message board hence reallocating the id's of all the messages
+
+
 };
 
 const get_date_string = time => {

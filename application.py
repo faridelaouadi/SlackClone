@@ -14,7 +14,9 @@ socketio = SocketIO(app)
 
 # in-memory data
 USERS = {}
-CHANNELS = {"General": ["This is a general public forum",deque([], maxlen=100)], "Starred Messages":["A collection of all your starred messages",{}]}
+CHANNELS = {"General": ["This is a general public forum",[]], "Starred Messages":["A collection of all your starred messages",{}]}
+#the new format of messages will be:
+# "channel_name" : ["channel_status", [list of messages], [deleted indexes], [starred indexes]]
 #starred messaged in the format {username:[(user,message,chat)...],...}
 #deque is used as it has fast pop and push access to each side. We will unlikely be randomly accessing elements hence we didnt choose to use a list
 
@@ -55,7 +57,7 @@ def new_channel(data):
     if data['name'] in CHANNELS:
         return False
     else:
-        CHANNELS[data['name']] = [data['channel_status'], deque(maxlen=100)]
+        CHANNELS[data['name']] = [data['channel_status'],[]]
         emit('new channel', { "name" : data['name'], "channel_status": data['channel_status']}, broadcast=True)
 
 @socketio.on('new msg')
@@ -81,8 +83,14 @@ def get_users():
 @socketio.on('get msgs')
 def get_msgs(data):
     if 'name' in data:
-        #if its starred messages send the relevant messages
-        emit('msgs', list(CHANNELS[data['name']][1]))
+        emit('msgs', CHANNELS[data['name']][1])
+
+
+@socketio.on('delete message')
+def delete_message(data):
+    #delete the message from the list of messages!
+    del CHANNELS[data['channel']][1][data['id']]
+    return
 
 @socketio.on('get starred messages')
 def get_starred_messages(data):
