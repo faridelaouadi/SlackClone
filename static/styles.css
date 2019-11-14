@@ -64,3 +64,9 @@
 .list-group-sender:hover {
   background-color: #00CD00;
 }
+
+
+#MessageOptionsModalTitle{
+  width: 100%;
+  height:auto;
+}

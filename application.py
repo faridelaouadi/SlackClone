@@ -14,7 +14,7 @@ socketio = SocketIO(app)
 
 # in-memory data
 USERS = {}
-CHANNELS = {"General": ["This is a general public forum",deque([], maxlen=100)]}
+CHANNELS = {"General": ["This is a general public forum",deque([], maxlen=100)], "Starred Messages":["A collection of all your starred messages",deque([], maxlen=100)]}
 #deque is used as it has fast pop and push access to each side. We will unlikely be randomly accessing elements hence we didnt choose to use a list
 
 @app.route("/")

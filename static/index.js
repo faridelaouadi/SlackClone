@@ -1,3 +1,6 @@
+var audio = new Audio('static/message.mp3');
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
   get_username(); //when the user first logs in, they are prompted to enter their username
@@ -27,7 +30,6 @@ const init = username => {
 
     socket.on("msg", data => {
       console.log("new message");
-      var audio = new Audio('static/message.mp3');
       audio.play()
       show_msg(data);
     });
@@ -37,8 +39,6 @@ const init = username => {
       for (let object of data) {
         let name = object[0];
         let status = object[1];
-        console.log("we got a channel from the server called --> " + name)
-        console.log("The channel has status ---> " + status)
         show_channel(name , status, socket);
       }
 
@@ -83,7 +83,6 @@ const setup = socket => {
     let status = channel_status_inp.value;
 
     if (!name || !status) {
-      console.log("no name provided for the new channel");
       document.querySelector("#newChannelErrorMessage").innerHTML = 'Please enter a name and Status for the new channel!';
       return;
     }
@@ -223,7 +222,7 @@ const show_msg = data => {
     let x = "hello world ";
     let ul = document.querySelector("#msg-list");
     let li = document.createElement("li");
-    li.addEventListener("mousedown", function(){mouseClick_handler(event, data)}, false);
+    li.addEventListener("mousedown", function(){click_on_message(event, data)}, false);
 
 
     if (localStorage.getItem("username") === data.username){
@@ -253,7 +252,7 @@ const show_msg = data => {
 };
 
 
-var mouseClick_handler = function (e, data) {
+var click_on_message = function (e, data) {
     // event and extra_data will be available here
     e = e || window.event;
     switch (e.which) {
@@ -261,7 +260,7 @@ var mouseClick_handler = function (e, data) {
       //case 1 -> left click
       //case 3 -> right click
      case 1:
-            document.querySelector("#MessageOptionsModalTitle").innerHTML= data.username + " :  \"" + data.msg + "\"";
+            document.querySelector("#MessageOptionsModalTitle").value= data.msg;
             $("#MessageOptions").modal({ show: true, backdrop: "static" });
             break;
    }
@@ -305,17 +304,14 @@ const get_username = () => {
 };
 
 function copyToClipboard(){
-  // Create new element
-  console.log("entering the clipbaord function")
-  var tempInput = document.createElement('INPUT');
-  document.body.appendChild(tempInput);
-  tempInput.setAttribute('value', "wa zebi wa zebi wa zebiiii")
-  tempInput.select();
-  console.log(x)
-  document.execCommand('copy');
-  document.body.removeChild(tempInput);
-  console.log("finished the function")
-
+  // Function to copy message to clipboard
+  console.log("we will be copying : ----> " + document.getElementById("MessageOptionsModalTitle").value);
+  var copyText = document.getElementById("MessageOptionsModalTitle");
+  /* Select the text field */
+  copyText.select();
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+  copyText.blur();
 }
 
 const get_date_string = time => {
