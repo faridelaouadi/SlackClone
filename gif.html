@@ -13,34 +13,35 @@
   </head>
   <body>
 
+    <input id="text" type="text" class="form-control" placeholder="Search for gifs" aria-label="Username" aria-describedby="basic-addon1">
+
+
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+    <button type="button" class="btn btn-primary" onclick="searchGifs()">
       Launch gif modal
     </button>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal fade" id="gifModal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">this title would be dynamic</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <h5 class="modal-title" id="gifModalTitle">this title would be dynamic</h5>
+            <button type="button" class="close" onclick="closeGifModal()" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div id="modalBody" class="modal-body" style="overflow-y: scroll; height:400px;">
-            
+          <div id="gifModalBody" class="modal-body" style="overflow-x: scroll; height:400px; width:480px;">
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-primary">Send GIF</button>
           </div>
         </div>
       </div>
     </div>
 
 
-    <script src="test.js"></script>
+    <script src="gif.js"></script>
 
 
 

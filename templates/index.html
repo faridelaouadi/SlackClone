@@ -64,7 +64,6 @@
                     <div class="input-group">
                         <input type="text" id="msg-text" class="form-control input-style" autocomplete="off" placeholder="Enter a message..." autofocus style="margin-right:10px;">
                         <div class="input-group-append">
-                            <button id="gif-send" type="submit" class="btn btn-primary">GIF</button>
                             <button id="msg-send" type="submit" class="btn btn-primary">Send</button>
                         </div>
                     </div>
@@ -81,7 +80,8 @@
                 <div style="margin-top:60px;text-align: center">
                   <button type="button" class="btn btn-outline-success btn-block">Edit Profile</button>
                   <button type="button" class="btn btn-outline-info btn-block">WhiteBoard</button>
-                  <button type="button" class="btn btn-outline-danger btn-block">Privacy Policy</button>
+                  <input id="text" autocomplete="off" type="text" class="form-control" placeholder="Search for gifs" aria-label="Username" aria-describedby="basic-addon1">
+                  <button type="button" class="btn btn-primary" onclick="searchGifs()">Launch gif modal</button>
                   <button type="button" class="btn btn-outline-warning btn-block">Chatbot</button>
                 </div>
             </div>
@@ -168,8 +168,27 @@
         </div>
     </div>
 
+    <div class="modal fade" id="gifModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="gifModalTitle">this title would be dynamic</h5>
+            <button type="button" class="close" onclick="closeGifModal()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div id="gifModalBody" class="modal-body" style="overflow-x: scroll; height:400px; width:480px;">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Send GIF</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
+
+    <script src="{{ url_for('static', filename='gif.js') }}"></script>
 
 
 </body>

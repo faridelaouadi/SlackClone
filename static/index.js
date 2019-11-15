@@ -89,6 +89,7 @@ const setup = socket => {
   let channel_status_inp = document.querySelector("#channel_status");
   let msg_inp = document.querySelector("#msg-text");
   let msg_form = document.querySelector("#msg-form");
+  let search_gif = document.querySelector("#search-gifs");
 
 
 
@@ -112,6 +113,7 @@ const setup = socket => {
   });
 
   msg_form.addEventListener("submit", e => {
+    console.log("the form was submitted")
     // no reloading
     e.preventDefault();
 
@@ -399,17 +401,3 @@ const get_date_string = time => {
     hour12: true
   })} | ${m_string}`;
 };
-
-//function to read the GIFs from user's computer
-function readURL(input) {
-          if (input.files && input.files[0]) {
-              var reader = new FileReader();
-
-              reader.onload = function (e) {
-                  $('#blah')
-                      .attr('src', e.target.result);
-              };
-
-              reader.readAsDataURL(input.files[0]);
-          }
-      }
