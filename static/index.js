@@ -51,8 +51,6 @@ const init = username => {
         show_channel(name , status);
       }
 
-
-
       // initial active channel
       show_active_channel(localStorage.getItem("channel"));
       change_msg_title(localStorage.getItem("channel"));
@@ -365,7 +363,7 @@ function starMessage(){
 function copyToClipboard(){
   // Function to copy message to clipboard
   $("#MessageOptions").modal("hide");
-  click.play();
+  click.play()
   var copyText = document.getElementById("MessageOptionsModalTitle");
   /* Select the text field */
   copyText.select();
@@ -376,8 +374,8 @@ function copyToClipboard(){
 function deleteMessage(){
   //we have the data_of_message_clicked as a global variable and can access the message were deleting by using the data_of_message_clicked.id
   $("#MessageOptions").modal("hide");
-  click.play();
-  console.log("we are trying to delete the message");
+  click.play()
+  console.log("we are trying to delete the message")
   socket.emit("delete message", data_of_message_clicked);
   socket.emit("get msgs", { name: localStorage.getItem("channel") });
   // so what we do, is basically let the server know which message was deleted
@@ -401,3 +399,17 @@ const get_date_string = time => {
     hour12: true
   })} | ${m_string}`;
 };
+
+//function to read the GIFs from user's computer
+function readURL(input) {
+          if (input.files && input.files[0]) {
+              var reader = new FileReader();
+
+              reader.onload = function (e) {
+                  $('#blah')
+                      .attr('src', e.target.result);
+              };
+
+              reader.readAsDataURL(input.files[0]);
+          }
+      }
