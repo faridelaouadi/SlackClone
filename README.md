@@ -4,7 +4,7 @@ Motivation
 
 Current Progress
 ----------------
-![](demo.gif)
+![Alt Text](https://media.giphy.com/media/gLQaKX7YGOYFyBaVIY/giphy.gif)
 
 1) User chooses a username and enters the app
 2) They can interact in the current public chats by sending messages or GIFs
