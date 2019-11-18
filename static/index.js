@@ -248,23 +248,38 @@ const clear_msgs = () => {
 };
 
 const show_starred_msg = data => {
-  console.log("We are trying to show some starred messages")
+  //console.log("We are trying to show some starred messages")
   if (localStorage.getItem("channel") == "Starred Messages") {
     let ul = document.querySelector("#msg-list");
     //access the message list
     let li = document.createElement("li");
     //create new element of starred messages
+    //the list is in the format [channel,message_type,message_content,username_of_sender]
+    username = data[3];
+    channel = data[0];
+    type_of_message = data[1];
+    content = data[2];
     li.classList.add("list-group-starred");
-    li.innerHTML = `<strong>${data[2]}</strong> ${
-      data[1]
-    } <i class="material-icons md-light">star_border</i> <small class="text-muted d-flex justify-content-start">${data[0]}</small>`;
+    console.log("we want to display a ---> "+ type_of_message);
+    switch (type_of_message){
+      case "message":{
+        console.log("we are inside the switch statment")
+        li.innerHTML = `<strong>${username}</strong> ${
+          content
+        } <i class="material-icons md-light">star_border</i> <small class="text-muted d-flex justify-content-start">${channel}</small>`;
+        break;
+      }
+      case "gif":{
+        li.innerHTML = `<strong>${username}</strong><img style="display:block;width:100%;"src=${content} alt="A GIF"><small class="text-muted d-flex justify-content-start">${channel}</small>`;
+        break;
+      }
+    }
     ul.appendChild(li);
     // scroll msg-list
     ul.scrollTop = ul.scrollHeight - ul.clientHeight;
 
-  };
 };
-
+};
 //function to display the message on the chat a person is on
 const show_msg = data => {
   if (localStorage.getItem("channel") == data.channel) {
@@ -287,7 +302,7 @@ const show_msg = data => {
           break;
         }
         case "gif":{
-          li.innerHTML = `<img src=${data.msg} alt="A GIF">`
+          li.innerHTML = `<img style="width:100%;"src=${data.msg} alt="A GIF">`
           //console.log("we would display a gif on your side ---> "+ data.msg);
           break;
         }
@@ -309,7 +324,7 @@ const show_msg = data => {
           break;
         }
         case "gif":{
-          li.innerHTML = `<img src=${data.msg} alt="A GIF">`
+          li.innerHTML = `<strong>${data.username}</strong><img style="display:block;width:100%;"src=${data.msg} alt="A GIF"><small class="text-muted d-flex justify-content-start">${get_date_string(data.created_at)}</small>`;
           break;
         }
         default:
@@ -383,6 +398,7 @@ function starMessage(){
   ring_sound.play();
   socket.emit("new starred message", { username: localStorage.getItem("username"),
                                       channel: data_of_message_clicked.channel,
+                                      type_of_message:data_of_message_clicked.type_of_message,
                                       username_of_message:data_of_message_clicked.username,
                                       message_content: data_of_message_clicked.msg});
 };

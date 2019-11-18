@@ -40,8 +40,8 @@ def new_starred_message(data):
         user_starred_messages = CHANNELS["Starred Messages"][1][data['username']]
         #refactor these two lines
     finally:
-        #we then append to that list the list of [channel,message_content,username_of_sender]
-        user_starred_messages.append([data['channel'],data['message_content'],data['username_of_message']])
+        #we then append to that list the list of [channel,message_type,message_content,username_of_sender]
+        user_starred_messages.append([data['channel'],data['type_of_message'],data['message_content'],data['username_of_message']])
     print(f"the user now has the follwong starred messages {user_starred_messages}")
 
 @socketio.on('userdata')
@@ -97,7 +97,9 @@ def get_starred_messages(data):
     if 'username' in data:
         try:
             #send the starred messages
-            emit('starred messages', CHANNELS["Starred Messages"][1][data['username']])
+            data_to_send = CHANNELS["Starred Messages"][1][data['username']] #this is basically a collection of the user's starred messages
+            emit('starred messages', data_to_send)
+
         except:
             #if they do not have any, send an empty list
             emit('starred messages', [["", "No messages have been starred", ""]])
