@@ -86,6 +86,17 @@ def get_channels(username):
     #custom_list is a list of pairs of channel_name,channel_status
     emit('channels', custom_list)
 
+@socketio.on('join private room')
+def join_private_room(data):
+    #data has username and room_id
+    #this logic will be changed when you implement the random string bullshit
+    for key in CHANNELS:
+        if data['room_id'] == key:
+            #the user will join the room
+            CHANNELS[data['room_id']][3].append(data['username'])
+    get_channels(data['username'])
+
+
 @socketio.on('get users')
 def get_users():
     emit('users', list(USERS.keys()))

@@ -53,6 +53,7 @@
                 <ul id="channel-list" class="list-group"></ul>
                     <div class="input-group">
                             <button id="add-channel" class="btn btn-primary" data-toggle="modal" data-target="#newChannelModal">+ New</button>
+                            <button id="join_room" class="btn btn-secondary" data-toggle="modal" data-target="#join-room">Join Private Room</button>
                     </div>
             </div>
 
@@ -188,6 +189,24 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- This is the modal to invite users  -->
+    <div class="modal show" id="join-room" tabindex="1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="roomIDTitle">Please enter the room ID</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="join_room_form">
+                        <input class="form-control" autocomplete="off" type="text" name="room_id" placeholder="Room ID" id="room_id">
+                        <button type="submit" class="btn btn-primary" style="margin-top:10px; float:right;">Join</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
 

@@ -95,6 +95,7 @@ const setup = socket => {
   let msg_inp = document.querySelector("#msg-text");
   let msg_form = document.querySelector("#msg-form");
   let search_gif = document.querySelector("#search-gifs");
+  let join_room_form = document.querySelector("#join_room_form");
 
 
 
@@ -146,6 +147,14 @@ const setup = socket => {
 
     msg_inp.value = "";
   });
+
+  join_room_form.addEventListener("submit", e =>{
+    e.preventDefault();
+    $('#join-room').modal('toggle'); //close the modal
+    let room_id_entered = document.querySelector("#room_id").value;
+    socket.emit("join private room", {username:localStorage.getItem("username"), room_id:room_id_entered});
+    location.reload();
+  })
 
   socket.emit("get channels", {username:localStorage.getItem("username")}); //get the channels from the server
   socket.emit("get users")
