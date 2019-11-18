@@ -69,8 +69,10 @@ def new_direct_message(data):
     username_of_sender = data['username']
     username_of_recipient = data['recipient']
     name_of_channel = f"{username_of_sender} -> {username_of_recipient}"
-    CHANNELS[name_of_channel] = [f"A Private chat between {username_of_sender} and {username_of_recipient} ",[], "private", [username_of_sender,username_of_recipient]]
-    
+    channel_status = f"A Private chat between {username_of_sender} and {username_of_recipient} "
+    CHANNELS[name_of_channel] = [channel_status,[], "private", [username_of_sender,username_of_recipient]]
+    #emit('new direct message', {"name": name_of_channel, "channel_status":channel_status} ,room=USERS[username_of_sender] )
+    emit('new direct message', {"name": name_of_channel, "channel_status":channel_status}, room=USERS[username_of_recipient] )
 
 @socketio.on('new msg')
 def new_msg(data):

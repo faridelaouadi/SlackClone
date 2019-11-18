@@ -106,7 +106,6 @@ const setup = socket => {
     let name = channel_name_inp.value;
     let status = channel_status_inp.value;
     let privacy = (channel_privacy.checked) ? "private" : "public";
-    console.log("New channel is ----> " + privacy);
     if (!name || !status) {
       document.querySelector("#newChannelErrorMessage").innerHTML = 'Please enter a name and Status for the new channel!';
       return;
