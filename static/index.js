@@ -111,7 +111,7 @@ const setup = socket => {
       return;
     }
 
-    socket.emit("new channels", { name:name, channel_status:status, privacy:privacy });
+    socket.emit("new channels", { name:name, channel_status:status, privacy:privacy, username:localStorage.getItem("username") });
     channel_name_inp.value = "";
     channel_status_inp.value = "";
     channel_privacy.checked = false;
@@ -147,7 +147,7 @@ const setup = socket => {
     msg_inp.value = "";
   });
 
-  socket.emit("get channels"); //get the channels from the server
+  socket.emit("get channels", {username:localStorage.getItem("username")}); //get the channels from the server
   socket.emit("get users")
 
   if (localStorage.getItem("channel")) {

@@ -54,10 +54,10 @@ def new_channel(data):
     if data['name'] in CHANNELS:
         return False
     else:
-        print(data)
+        print(CHANNELS)
         if data['privacy'] == "private":
             #[status, [all the messages], public/private , [members]]
-            CHANNELS[data['name']] = [data['channel_status'],[], "private", [request.sid]]
+            CHANNELS[data['name']] = [data['channel_status'],[], "private", [data['username']]]
             emit('new private channel', { "name" : data['name'], "channel_status": data['channel_status']}, room=request.sid)
         else:
             #public channel
@@ -74,13 +74,13 @@ def new_msg(data):
         emit('msg', data, broadcast=True)
 
 @socketio.on('get channels')
-def get_channels():
+def get_channels(username):
     custom_list = []
     for key in CHANNELS:
         if CHANNELS[key][2] == "public":
             custom_list.append([key,CHANNELS[key][0]])
         else:
-            if request.sid in CHANNELS[key][3]:
+            if username['username'] in CHANNELS[key][3]:
                 custom_list.append([key,CHANNELS[key][0]])
 
     #custom_list is a list of pairs of channel_name,channel_status
