@@ -216,11 +216,21 @@ const show_user_in_list = (name,socket) => {
   li.innerHTML = name;
   //add the condition for when the username is me
   li.addEventListener("click", () => {
-    console.log("you clicked " + name);
+    $('#username_of_recipient').data('username',name);
+    $("#directMessage").modal({ show: true, backdrop: "static" });
     //this would be where we would open a modal to create a direct message.
 });
   ul.appendChild(li);
 };
+
+function new_direct_message(){
+  console.log("the direct message is being created")
+  var username_of_recipient = $('#username_of_recipient').data('username');
+  socket.emit("new direct message", {username:localStorage.getItem('username'), recipient:username_of_recipient});
+  $('#directMessage').modal('toggle'); //close the modal
+  socket.emit("get channels", {username:localStorage.getItem("username")});
+
+}
 
 const change_msg_title = title_name => {
   // change title

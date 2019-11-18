@@ -191,7 +191,7 @@
       </div>
     </div>
 
-    <!-- This is the modal to invite users  -->
+    <!-- This is the modal to join rooms -->
     <div class="modal show" id="join-room" tabindex="1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -209,7 +209,26 @@
         </div>
     </div>
 
+    <!-- This is the modal to join rooms -->
+    <div class="modal show" id="directMessage" tabindex="1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Direct Message</h5>
+                </div>
+                <div class="modal-body">
+                  <p>Would you like to slide in the DMs?</p>
+                </div>
+                <div class="modal-footer">
+                  <p id="username_of_recipient"></p>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                  <button type="button" class="btn btn-primary" onclick="new_direct_message()">Yes</button>
 
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="{{ url_for('static', filename='gif.js') }}"></script>
 

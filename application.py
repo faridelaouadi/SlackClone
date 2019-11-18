@@ -64,6 +64,14 @@ def new_channel(data):
             CHANNELS[data['name']] = [data['channel_status'],[], "public",]
             emit('new public channel', { "name" : data['name'], "channel_status": data['channel_status']}, broadcast=True)
 
+@socketio.on('new direct message')
+def new_direct_message(data):
+    username_of_sender = data['username']
+    username_of_recipient = data['recipient']
+    name_of_channel = f"{username_of_sender} -> {username_of_recipient}"
+    CHANNELS[name_of_channel] = [f"A Private chat between {username_of_sender} and {username_of_recipient} ",[], "private", [username_of_sender,username_of_recipient]]
+    
+
 @socketio.on('new msg')
 def new_msg(data):
     if 'channel' in data:
