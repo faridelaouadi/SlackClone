@@ -15,7 +15,7 @@ socketio = SocketIO(app)
 # in-memory data
 USERS = {}
 CHANNELS = {"General": ["This is a general public forum",[]], "Starred Messages":["A collection of all your starred messages",{}]}
-#the new format of messages will be {channel_name: [{message1-info, message2-info}]}
+#the new format of messages will be {channel_name: [channel_status,{message1-info, message2-info}]}
 #message info is in this dictionary format --> {'msg': 'hello', 'channel': 'General', 'username': 'Farid', 'created_at': 1574078726}
 #deque is used as it has fast pop and push access to each side. We will unlikely be randomly accessing elements hence we didnt choose to use a list
 
