@@ -2,6 +2,7 @@ var typingTimer; //timer identifier
 var doneTypingInterval = 500;  //time in ms, 0.5 second for example
 var $input = $('#text'); //get the text from the modal
 var image_counter = 0;  // we will use this to know which image is currently clicked
+var image_clicked;
 
 //on keyup, start the countdown
 $input.on('keyup', function () {
@@ -49,7 +50,7 @@ request.send()
 
 function loadImages(data){
 
-  var image_clicked;
+
   data["data"].forEach(value => {
     //loop through all the GIF datasets
     var img = document.createElement('img'); //make the image element
@@ -73,5 +74,18 @@ function loadImages(data){
 function closeGifModal(){
   document.getElementById("gifModalBody").innerHTML = ""; //remove all the gifs from modal
   document.getElementById("text").value = ""; // remove the user input from modal input field
+  image_counter = 0;
   $('#gifModal').modal('toggle'); //close the modal
+}
+
+function sendGIF(){
+  const image_to_send = document.querySelector("img[data-image_number="+CSS.escape(image_clicked)+"]");
+  console.log("We are sending the GIF with reference " + image_to_send.src);
+  socket.emit("new msg", {
+    msg: image_to_send.src,
+    channel:localStorage.getItem("channel"),
+    type_of_message: "gif",
+    username: localStorage.getItem("username")
+  });//send the message data to the socket
+  closeGifModal();
 }

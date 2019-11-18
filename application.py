@@ -15,9 +15,8 @@ socketio = SocketIO(app)
 # in-memory data
 USERS = {}
 CHANNELS = {"General": ["This is a general public forum",[]], "Starred Messages":["A collection of all your starred messages",{}]}
-#the new format of messages will be:
-# "channel_name" : ["channel_status", [list of messages], [deleted indexes], [starred indexes]]
-#starred messaged in the format {username:[(user,message,chat)...],...}
+#the new format of messages will be {channel_name: [{message1-info, message2-info}]}
+#message info is in this dictionary format --> {'msg': 'hello', 'channel': 'General', 'username': 'Farid', 'created_at': 1574078726}
 #deque is used as it has fast pop and push access to each side. We will unlikely be randomly accessing elements hence we didnt choose to use a list
 
 @app.route("/")
@@ -65,6 +64,7 @@ def new_msg(data):
     if 'channel' in data:
         data['created_at'] = int(time.time())
         CHANNELS[data['channel']][1].append(data)
+        print(data)
         #data['username'] is the username of the person who sent the message
         emit('msg', data, broadcast=True)
 

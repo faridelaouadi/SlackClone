@@ -63,7 +63,7 @@
                 <form id="msg-form" class="mt-3 mb-3">
                     <div class="input-group">
                         <input type="text" id="msg-text" class="form-control input-style" autocomplete="off" placeholder="Enter a message..." autofocus style="margin-right:10px;">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gifModal" style="margin: auto;">GIFs</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gifModal" style="margin-right: : 5px;">GIFs <span class="material-icons">search</span></button>
                         <div class="input-group-append">
                             <button id="msg-send" type="submit" class="btn btn-primary">Send</button>
                         </div>
@@ -180,6 +180,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" onclick="searchGifs()">Load More</button>
+            <button type="button" class="btn btn-primary" onclick="sendGIF()">Send GIF</button>
           </div>
         </div>
       </div>

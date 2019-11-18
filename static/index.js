@@ -1,14 +1,11 @@
 var message_sound = new Audio('static/message.mp3');
 var ring_sound = new Audio('static/ring.mp3');
-var click = new Audio('static/button.mp3');
+var click = new Audio('static/button.mp3');// sound effects from notificationsounds.com
 var data_of_message_clicked;
 var socket;
 var message_id;
 
-// sound effects from notificationsounds.com
-
 document.addEventListener("DOMContentLoaded", () => {
-
   get_username(); //when the user first logs in, they are prompted to enter their username
 });
 
@@ -18,6 +15,7 @@ const init = username => {
   socket = io.connect(
     location.protocol + "//" + document.domain + ":" + location.port
   );
+
 
   socket.on("connect", () => {
 
@@ -68,7 +66,7 @@ const init = username => {
       clear_msgs();
       message_id = 0;
       data.forEach(msg => {
-        msg.id = message_id;
+        msg.id = message_id; //message id is used for the message onclick functionality
         show_msg(msg);
         message_id += 1;
       });
@@ -133,6 +131,7 @@ const setup = socket => {
     socket.emit("new msg", {
       msg,
       channel,
+      type_of_message: "message",
       username: localStorage.getItem("username")
     });//send the message data to the socket
 
@@ -266,6 +265,7 @@ const show_starred_msg = data => {
   };
 };
 
+//function to display the message on the chat a person is on
 const show_msg = data => {
   if (localStorage.getItem("channel") == data.channel) {
     let ul = document.querySelector("#msg-list");
@@ -276,21 +276,46 @@ const show_msg = data => {
     if (localStorage.getItem("username") === data.username){
       //if i sent the message
       li.classList.add("list-group-item");
+      console.log("the type of message we have here is ---> " + data.type_of_message)
+      switch (data.type_of_message){
+        case "message":{
+          li.innerHTML = `<strong class="d-flex justify-content-end">${
+            data.msg
+          } </strong><small class="text-muted d-flex justify-content-end">${get_date_string(
+            data.created_at
+          )}</small>`;
+          break;
+        }
+        case "gif":{
+          li.innerHTML = `<img src=${data.msg} alt="A GIF">`
+          //console.log("we would display a gif on your side ---> "+ data.msg);
+          break;
+        }
+        default:
+        console.log("there was an error displaying your message")
 
-      li.innerHTML = `<strong class="d-flex justify-content-end">${
-        data.msg
-      } </strong><small class="text-muted d-flex justify-content-end">${get_date_string(
-        data.created_at
-      )}</small>`;
+      }
 
     }else{
       //if the message is from someone else.
       li.classList.add("list-group-sender");
-      li.innerHTML = `<strong>${data.username}</strong>: ${
-        data.msg
-      } <small class="text-muted d-flex justify-content-start">${get_date_string(
-        data.created_at
-      )}</small>`;
+      switch (data.type_of_message){
+        case "message":{
+          li.innerHTML = `<strong>${data.username}</strong>: ${
+            data.msg
+          } <small class="text-muted d-flex justify-content-start">${get_date_string(
+            data.created_at
+          )}</small>`;
+          break;
+        }
+        case "gif":{
+          li.innerHTML = `<img src=${data.msg} alt="A GIF">`
+          break;
+        }
+        default:
+        console.log("there was an error displaying their message")
+      }
+
     }
 
     ul.appendChild(li);
@@ -298,7 +323,6 @@ const show_msg = data => {
     ul.scrollTop = ul.scrollHeight - ul.clientHeight;
   }
 };
-
 
 var click_on_message = function (e, data) {
     // event and extra_data will be available here
@@ -362,6 +386,7 @@ function starMessage(){
                                       username_of_message:data_of_message_clicked.username,
                                       message_content: data_of_message_clicked.msg});
 };
+
 function copyToClipboard(){
   // Function to copy message to clipboard
   $("#MessageOptions").modal("hide");
@@ -373,6 +398,7 @@ function copyToClipboard(){
   document.execCommand("copy");
   copyText.blur();
 };
+
 function deleteMessage(){
   //we have the data_of_message_clicked as a global variable and can access the message were deleting by using the data_of_message_clicked.id
   $("#MessageOptions").modal("hide");
@@ -382,8 +408,6 @@ function deleteMessage(){
   socket.emit("get msgs", { name: localStorage.getItem("channel") });
   // so what we do, is basically let the server know which message was deleted
   // then refresh the message board hence reallocating the id's of all the messages
-
-
 };
 
 const get_date_string = time => {
