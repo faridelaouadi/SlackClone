@@ -23,7 +23,11 @@ const init = username => {
 
     setup(socket);
 
-    socket.on("new channel", data => {
+    socket.on("new public channel", data => {
+      show_channel(data.name, data.channel_status);
+    });
+
+    socket.on("new private channel", data => {
       show_channel(data.name, data.channel_status);
     });
 
@@ -34,7 +38,7 @@ const init = username => {
     });
 
     socket.on("msg", data => {
-      console.log("new message");
+      //console.log("new message");
       message_sound.play()
       data.id = message_id;
       show_msg(data);
@@ -78,6 +82,8 @@ const init = username => {
         show_starred_msg(msg);
       })
     });
+
+
   });
 };
 
@@ -85,6 +91,7 @@ const setup = socket => {
   let channel_form = document.querySelector("#newChannel-form");
   let channel_name_inp = document.querySelector("#channel_name");
   let channel_status_inp = document.querySelector("#channel_status");
+  let channel_privacy =  document.querySelector("#private_checkbox");
   let msg_inp = document.querySelector("#msg-text");
   let msg_form = document.querySelector("#msg-form");
   let search_gif = document.querySelector("#search-gifs");
@@ -97,15 +104,17 @@ const setup = socket => {
 
     let name = channel_name_inp.value;
     let status = channel_status_inp.value;
-
+    let privacy = (channel_privacy.checked) ? "private" : "public";
+    console.log("New channel is ----> " + privacy);
     if (!name || !status) {
       document.querySelector("#newChannelErrorMessage").innerHTML = 'Please enter a name and Status for the new channel!';
       return;
     }
 
-    socket.emit("new channel", { name:name, channel_status:status });
+    socket.emit("new channels", { name:name, channel_status:status, privacy:privacy });
     channel_name_inp.value = "";
     channel_status_inp.value = "";
+    channel_privacy.checked = false;
     $('#newChannelModal').modal('hide');
     document.querySelector("#newChannelErrorMessage").innerHTML = ''; //remove the warning message from the top of modal!
   });
@@ -277,9 +286,9 @@ const show_starred_msg = data => {
     ul.appendChild(li);
     // scroll msg-list
     ul.scrollTop = ul.scrollHeight - ul.clientHeight;
+};
+};
 
-};
-};
 //function to display the message on the chat a person is on
 const show_msg = data => {
   if (localStorage.getItem("channel") == data.channel) {

@@ -14,7 +14,7 @@ socketio = SocketIO(app)
 
 # in-memory data
 USERS = {}
-CHANNELS = {"General": ["This is a general public forum",[]], "Starred Messages":["A collection of all your starred messages",{}]}
+CHANNELS = {"General": ["This is a general public forum",[], "public"], "Starred Messages":["A collection of all your starred messages",{},"public"]}
 #the new format of messages will be {channel_name: [channel_status,{message1-info, message2-info}]}
 #message info is in this dictionary format --> {'msg': 'hello', 'channel': 'General', 'username': 'Farid', 'created_at': 1574078726}
 #deque is used as it has fast pop and push access to each side. We will unlikely be randomly accessing elements hence we didnt choose to use a list
@@ -29,8 +29,6 @@ def connection():
 
 @socketio.on('new starred message')
 def new_starred_message(data):
-    print("We have recived the request to add a new starred message to the user")
-    print(f"Chat: {data['channel']} \n Message: {data['message_content']} \n")
     try:
         #if the user already has starred messages, we access them
         user_starred_messages = CHANNELS["Starred Messages"][1][data['username']]
@@ -51,13 +49,20 @@ def user_data(data):
         USERS[username] = request.sid #request socket ID
         emit('new user', data, broadcast=True)
 
-@socketio.on('new channel')
+@socketio.on('new channels')
 def new_channel(data):
     if data['name'] in CHANNELS:
         return False
     else:
-        CHANNELS[data['name']] = [data['channel_status'],[]]
-        emit('new channel', { "name" : data['name'], "channel_status": data['channel_status']}, broadcast=True)
+        print(data)
+        if data['privacy'] == "private":
+            #[status, [all the messages], public/private , [members]]
+            CHANNELS[data['name']] = [data['channel_status'],[], "private", [request.sid]]
+            emit('new private channel', { "name" : data['name'], "channel_status": data['channel_status']}, room=request.sid)
+        else:
+            #public channel
+            CHANNELS[data['name']] = [data['channel_status'],[], "public",]
+            emit('new public channel', { "name" : data['name'], "channel_status": data['channel_status']}, broadcast=True)
 
 @socketio.on('new msg')
 def new_msg(data):
@@ -72,7 +77,12 @@ def new_msg(data):
 def get_channels():
     custom_list = []
     for key in CHANNELS:
-        custom_list.append([key,CHANNELS[key][0]])
+        if CHANNELS[key][2] == "public":
+            custom_list.append([key,CHANNELS[key][0]])
+        else:
+            if request.sid in CHANNELS[key][3]:
+                custom_list.append([key,CHANNELS[key][0]])
+
     #custom_list is a list of pairs of channel_name,channel_status
     emit('channels', custom_list)
 
