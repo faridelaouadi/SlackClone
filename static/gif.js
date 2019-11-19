@@ -47,6 +47,16 @@ function searchGifs(){
 request.send()
 };
 
+function scrolling(){
+  var bod = document.getElementById("gifModalBody")
+  var scrollY = bod.scrollHeight - bod.scrollTop;
+  var height = bod.offsetHeight;
+  var offset = height - scrollY;
+  if (offset == 0 || offset == 1) {
+      searchGifs();
+  };
+}
+
 
 function loadImages(data){
 
