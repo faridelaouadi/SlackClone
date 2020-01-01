@@ -1,3 +1,5 @@
+![](slack.png)
+
 Motivation
 ----------
 - Became interested in flask and thence socketIO so decided to create a chat app to strengthen my knowledge.

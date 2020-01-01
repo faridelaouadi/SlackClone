@@ -40,7 +40,6 @@ def new_starred_message(data):
     finally:
         #we then append to that list the list of [channel,message_type,message_content,username_of_sender]
         user_starred_messages.append([data['channel'],data['type_of_message'],data['message_content'],data['username_of_message']])
-    print(f"the user now has the follwong starred messages {user_starred_messages}")
 
 @socketio.on('userdata')
 def user_data(data):
